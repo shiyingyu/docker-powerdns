@@ -6,21 +6,21 @@ MAINTAINER Christoph Wiechert <wio@psitrax.de>
 ENV REFRESHED_AT="2018-11-09" \
     POWERDNS_VERSION=4.1.5 \
     MYSQL_AUTOCONF=true \
-    MYSQL_HOST="mysql" \
+    MYSQL_HOST="192.168.100.8" \
     MYSQL_PORT="3306" \
-    MYSQL_USER="root" \
-    MYSQL_PASS="root" \
-    MYSQL_DB="pdns"
+    MYSQL_USER="powerdns" \
+    MYSQL_PASS="" \
+    MYSQL_DB="powerdns"
 
 # alpine:3.8: mariadb-connector-c-dev
 
 RUN apk --update add libpq sqlite-libs libstdc++ libgcc mariadb-client mariadb-client-libs && \
     apk add --virtual build-deps \
-      g++ make mariadb-dev postgresql-dev sqlite-dev curl boost-dev && \
+      g++ make mariadb-dev curl boost-dev && \
     curl -sSL https://downloads.powerdns.com/releases/pdns-$POWERDNS_VERSION.tar.bz2 | tar xj -C /tmp && \
     cd /tmp/pdns-$POWERDNS_VERSION && \
     ./configure --prefix="" --exec-prefix=/usr --sysconfdir=/etc/pdns \
-      --with-modules="bind gmysql gpgsql gsqlite3" --without-lua && \
+      --with-modules="bind gmysql" --without-lua && \
     make && make install-strip && cd / && \
     mkdir -p /etc/pdns/conf.d && \
     addgroup -S pdns 2>/dev/null && \
