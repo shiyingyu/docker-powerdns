@@ -14,7 +14,8 @@ ENV REFRESHED_AT="2018-11-09" \
 
 # alpine:3.8: mariadb-connector-c-dev
 
-RUN apk --update add libpq libstdc++ libgcc mariadb-client mariadb-client-libs && \
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g' /etc/apk/repositories && \
+    apk --update add libpq libstdc++ libgcc mariadb-client mariadb-client-libs && \
     apk add --virtual build-deps \
       g++ make mariadb-dev curl boost-dev && \
     curl -sSL https://downloads.powerdns.com/releases/pdns-$POWERDNS_VERSION.tar.bz2 | tar xj -C /tmp && \
